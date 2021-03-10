@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import "../styles/tasklist.scss";
 
@@ -14,7 +14,7 @@ export function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState("");
 
-  function handleCreateNewTask() {
+  const handleCreateNewTask = useCallback(() => {
     if (newTaskTitle) {
       const newTask = {
         id: Math.random(),
@@ -24,9 +24,9 @@ export function TaskList() {
       setTasks([...tasks, newTask]);
       setNewTaskTitle("");
     }
-  }
+  }, [newTaskTitle, tasks]);
 
-  function handleToggleTaskCompletion(id: number) {
+  const handleToggleTaskCompletion = useCallback((id: number) => {
     const newTasks = tasks.map((task: Task) => {
       if (task.id === id) {
         return {
@@ -39,15 +39,15 @@ export function TaskList() {
     });
 
     setTasks(newTasks);
-  }
+  }, [tasks]);
 
-  function handleRemoveTask(id: number) {
+  const handleRemoveTask = useCallback((id: number) => {
     const newTasks = tasks.filter((task: Task) => {
       return task.id !== id;
     });
 
     setTasks(newTasks);
-  }
+  }, [tasks]);
 
   return (
     <section className="task-list container">
